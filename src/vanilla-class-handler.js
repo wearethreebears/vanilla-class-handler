@@ -30,7 +30,7 @@
         -> function: not required, defaults to toggle - acceptable values: "toggle" || "add" || "remove"
     
     Example: 
-    data-class-trigger="[
+    onclick="clickHandler(event,[
         {
             'target': '.global-header__nav-item',
             'classes': 'global-header__nav-item--mobile-sub-nav-active',
@@ -41,15 +41,14 @@
             'target': '.global-header__container',
             'classes': 'global-header__container--mobile-nav-active'
         }
-    ]"
+    ])"
 */
 
 const ToggleClass = {
-
     /*
     * Handles adding and removal or classes
     */
-    handleClasses(data) {
+    classHandler(data) {
         let targets = document.querySelectorAll(data.target), //Because you may want to add/ remove classes on multiple instances
             classes = data.classes.split(','), //Split the classes so you can add and remove each
             classFunction = data.function ? data.function : 'toggle', //Fallback set to toggle if no function is set
@@ -84,16 +83,12 @@ const ToggleClass = {
     /*
     * Toggle controller 
     */
-    toggleClasses(e) {
+    onEvent(e, data) {
         e.preventDefault();
-        let clicked = e.currentTarget,
-            data = clicked.getAttribute('data-class-trigger').replace(/\s/g, '').replace(/'/g, '"'); //Format for JSON
-            dataItems = JSON.parse(data); //Parse JSON data so we can work with it
 
-
-        dataItems.forEach((item) => {
+        data.forEach((item) => {
             if (item.target && item.classes) { // Check the required JSON attributes are set
-                this.handleClasses(item);
+                this.classHandler(item);
             }
             else { //Fail if required JSON attributes do not exist
                 console.error('"target" and "classes" are required'); 
@@ -105,13 +100,7 @@ const ToggleClass = {
     * Initiates the toggle triggers
     */
     init() {
-        let self = this;
-            toggles = document.querySelectorAll('[data-class-trigger]');
-        
-        //Add a click event too all triggers
-        toggles.forEach((toggle) => {
-            toggle.addEventListener('click', self.toggleClasses.bind(self));
-        });
+        window.classHandler = this.onEvent.bind(this);
     }
 };
 
