@@ -8,7 +8,7 @@
     
    # Example:
     
-    ```
+    
     <button onclick="classHandler(event,[
         {            
             'target': '.header__nav-item',
@@ -20,4 +20,4 @@
             'classes': 'is-active'
         }    
     ])">Click me</button>
-    ```
+    
